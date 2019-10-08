@@ -21,24 +21,25 @@ Profiles =
       {erl_opts, [{d, build_brod_cli}]}
     ]}
   ]},
-CONFIG1 = case IsRebar3 of
-  true ->
-    [Profiles | CONFIG];
-  false ->
-    URLs = [ {supervisor3, "https://github.com/klarna/supervisor3.git"}
-           , {kafka_protocol, "https://github.com/klarna/kafka_protocol.git"}
-           ],
-    Rebar3Deps = proplists:get_value(deps, CONFIG),
-    Rebar2Deps =
-      lists:map(
-        fun({Name, URL}) ->
-          case proplists:get_value(Name, Rebar3Deps) of
-            {git, _, _} = Git -> {Name, ".*", Git};
-            Vsn               -> {Name, ".*", {git, URL, {tag, Vsn}}}
-          end
-        end, URLs),
-   lists:keyreplace(deps, 1, CONFIG, {deps, Rebar2Deps})
-end,
+CONFIG1 = CONFIG,
+% CONFIG1 = case IsRebar3 of
+%   true ->
+%     [Profiles | CONFIG];
+%   false ->
+%     URLs = [ {supervisor3, "https://github.com/klarna/supervisor3.git"}
+%            , {kafka_protocol, "https://github.com/klarna/kafka_protocol.git"}
+%            ],
+%     Rebar3Deps = proplists:get_value(deps, CONFIG),
+%     Rebar2Deps =
+%       lists:map(
+%         fun({Name, URL}) ->
+%           case proplists:get_value(Name, Rebar3Deps) of
+%             {git, _, _} = Git -> {Name, ".*", Git};
+%             Vsn               -> {Name, ".*", {git, URL, {tag, Vsn}}}
+%           end
+%         end, URLs),
+%    lists:keyreplace(deps, 1, CONFIG, {deps, Rebar2Deps})
+% end,
 case os:getenv("TRAVIS") of
   "true" ->
     JobId = os:getenv("TRAVIS_JOB_ID"),
